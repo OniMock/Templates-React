@@ -2,7 +2,8 @@ export const languageConfig = {
   code: 'en',
   name: 'English',
   nativeName: 'English',
-  flag: 'us'
+  flag: 'us',
+  locale: 'en-US'
 };
 
 export const translations = {

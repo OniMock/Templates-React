@@ -2,7 +2,8 @@ export const languageConfig = {
   code: 'pt-br',
   name: 'Português (Brasil)',
   nativeName: 'Português (Brasil)',
-  flag: 'br'
+  flag: 'br',
+  locale: 'pt-BR'
 };
 
 export const translations = {

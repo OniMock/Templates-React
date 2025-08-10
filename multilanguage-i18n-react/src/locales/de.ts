@@ -1,8 +1,9 @@
 export const languageConfig = {
   code: 'de',
-  name: 'Deutsch',
+  name: 'German',
   nativeName: 'Deutsch',
-  flag: 'de'
+  flag: 'de',
+  locale: 'de-DE'
 };
 
 export const translations = {

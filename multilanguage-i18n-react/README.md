@@ -31,20 +31,21 @@ npm install -D tailwindcss-animate
 ```
 src/
 ├── contexts/
-│   ├── LanguageContext.ts
-│   ├── LanguageProvider.tsx
-│   └── LanguageSelector.tsx
+│   └── LanguageContext.ts          # Definição do contexto
+├── providers/
+│   └── LanguageProvider.tsx        # Provider do contexto
+├── components/
+│   └── LanguageSelector.tsx        # Seletor visual de idiomas
 ├── hooks/
-│   └── use-language.ts
+│   └── useLanguage.ts              # Hook para usar o contexto
 ├── types/
-│   └── language.ts
+│   └── language.ts                 # Tipos TypeScript
 ├── utils/
-│   └── cookies.ts
-└── lang/
-    ├── index.ts
-    ├── en.ts
-    ├── pt-br.ts
-    └── [outros idiomas...]
+│   └── cookies.ts                  # Utilitários para cookies
+└── locales/
+    ├── en.ts                       # Traduções em inglês
+    ├── ptBr.ts                     # Traduções em português
+    └── [outros idiomas...]         # Outros arquivos de idioma
 ```
 
 ### 2. Configure o CSS para as bandeiras:
@@ -59,7 +60,7 @@ Adicione ao seu arquivo CSS principal (index.css ou App.css):
 
 ```tsx
 // main.tsx ou App.tsx
-import { LanguageProvider } from './contexts/LanguageProvider';
+import { LanguageProvider } from './providers/LanguageProvider';
 
 function App() {
   return (
@@ -73,7 +74,7 @@ function App() {
 ### 4. Use o hook em qualquer componente:
 
 ```tsx
-import { useLanguage } from './hooks/use-language';
+import { useLanguage } from './hooks/useLanguage';
 
 function MeuComponente() {
   const { t, currentLanguage, setLanguage } = useLanguage();
@@ -90,7 +91,7 @@ function MeuComponente() {
 ### 5. Adicione o seletor de idiomas:
 
 ```tsx
-import LanguageSelector from './contexts/LanguageSelector';
+import LanguageSelector from './components/LanguageSelector';
 
 function Header() {
   return (
@@ -107,35 +108,37 @@ function Header() {
 ### 1. Crie um novo arquivo de idioma:
 
 ```typescript
-// src/lang/fr.ts
-import { LanguageFile } from '../types/language';
-
-const fr: LanguageFile = {
-  config: {
-    code: 'fr',
-    name: 'French',
-    nativeName: 'Français',
-    flag: 'fr', // Código da bandeira (flag-icons)
-  },
-  translations: {
-    'welcome.title': 'Bienvenue',
-    'welcome.message': 'Bonjour {name}!',
-    // Adicione suas traduções aqui
-  },
+// src/locales/fr.ts
+export const languageConfig = {
+  code: 'fr',
+  name: 'French',
+  nativeName: 'Français',
+  flag: 'fr', // Código da bandeira (flag-icons)
+  locale: 'fr-FR', // Para formatação de datas
 };
 
-export default fr;
+export const translations = {
+  'welcome.title': 'Bienvenue',
+  'welcome.message': 'Bonjour {{name}}!', // Use {{}} para variáveis
+  // Adicione suas traduções aqui
+};
 ```
 
-### 2. Registre o idioma no index.ts:
+### 2. Registre o idioma no LanguageProvider:
 
 ```typescript
-// src/lang/index.ts
-import fr from './fr';
+// src/providers/LanguageProvider.tsx
+import {
+  translations as frTranslations,
+  languageConfig as frConfig,
+} from '../locales/fr';
 
-export const languageFiles: Record<string, LanguageFile> = {
-  // ... outros idiomas
-  fr, // Adicione aqui
+const languageFiles: Record<string, LanguageFile> = {
+  // ... outros idiomas existentes
+  fr: {
+    ...frConfig,
+    translations: frTranslations,
+  },
 };
 ```
 
@@ -200,15 +203,22 @@ className={`flex items-center gap-2 px-3 py-2 transition-colors duration-300 rou
 ### Alterar idioma padrão:
 
 ```typescript
-// src/contexts/LanguageProvider.tsx
-const DEFAULT_LANGUAGE = 'pt-br'; // Altere aqui
+// src/providers/LanguageProvider.tsx
+const [currentLanguage, setCurrentLanguage] = useState<string>('en'); // Altere aqui
 ```
 
 ### Alterar nome do cookie:
 
 ```typescript
-// src/contexts/LanguageProvider.tsx
-const LANGUAGE_COOKIE = 'meu_idioma_preferido'; // Altere aqui
+// src/providers/LanguageProvider.tsx
+// Na função setLanguage, altere 'language' para o nome desejado:
+document.cookie = `meu_idioma_preferido=${language}; path=/; max-age=31536000`;
+
+// E também na recuperação do cookie:
+const savedLanguage = document.cookie
+  .split('; ')
+  .find((row) => row.startsWith('meu_idioma_preferido='))
+  ?.split('=')[1];
 ```
 
 ### Alterar tempo de expiração do cookie:
