@@ -33,7 +33,7 @@ const Contact = () => {
     {
       icon: Mail,
       label: 'Email',
-      url: 'mailto:onimock@gmail.com',
+      url: 'mailto:contact@onimock.com',
       color: 'hover:text-red-400',
     },
   ];
@@ -80,7 +80,7 @@ const Contact = () => {
             </h3>
             <p className="text-gray-400 mb-8">{t('contact.description')}</p>
             <a
-              href="mailto:onimock@gmail.com"
+              href="mailto:contact@onimock.com"
               className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
             >
               <Mail className="w-5 h-5" />
